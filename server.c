@@ -2,9 +2,6 @@
 
 FILE *chemptr,*appptr,*fineptr;
 
-// struct apparatus apps;
-// struct chemicals chem;
-// struct student stu;
 
 int login_function()
 {
@@ -115,9 +112,9 @@ void menu(int main_choice)
             scanf("%s",id);
             showOne(main_choice,id);
             break;
-        // case 5:
-        //     showAll(main_choice);
-        //     break;
+        case 5:
+            showAll(main_choice);
+            break;
         default:
             printf("Try again \n");
             break;
@@ -362,5 +359,58 @@ int showOne(int main_choice,char *id)
             return 0;
         }
         fclose(appptr);
+    }
+}
+
+
+void showAll(int choice)
+{
+    if(choice == 1)
+    {
+        appptr = fopen("apparatus.txt","r");
+        if (!appptr)
+        {
+        // Error in file opening
+        printf("Can't open file\n");
+        return ;
+        }
+        char line[1024];
+        while(fgets(line,1024,appptr))
+        {
+            printf("%s",line);
+        }
+        printf("\n");
+    }
+    else if(choice == 2)
+    {
+        chemptr = fopen("chemicals.txt","r");
+        if (!chemptr)
+        {
+        // Error in file opening
+        printf("Can't open file\n");
+        return ;
+        }
+        char line[1024];
+        while(fgets(line,1024,chemptr))
+        {
+            printf("%s",line);
+        }
+        printf("\n");
+    }
+    else
+    {
+        fineptr = fopen("fines.txt","r");
+        if (!fineptr)
+        {
+        // Error in file opening
+        printf("Can't open file\n");
+        return ;
+        }
+        char line[1024];
+        while(fgets(line,1024,fineptr))
+        {
+            printf("%s",line);
+        }
+        printf("\n");
     }
 }
