@@ -1,6 +1,6 @@
 #include "header.h"
 
-FILE *chemptr,*appptr,*fineptr;
+FILE *chemptr, *appptr, *fineptr, *ptr2, *ptr3;
 
 
 int login_function()
@@ -18,14 +18,14 @@ int login_function()
     while(1)
     {
         printf("1. Students\n2. Admin\nEnter your choice\n");
-        scanf("%d",&login_choice);
+        scanf("%d", &login_choice);
         switch (login_choice)
         {
         case 1:
             
             printf("Enter username\n");
-            scanf("%s",username);
-            //fscanf(stdin,username);//By the use of scanf for inputting strings we are taking care of              and avoiding spaces
+            scanf("%s", username);
+            //fscanf(stdin, username);//By the use of scanf for inputting strings we are taking care of              and avoiding spaces
             do
             {
                 printf("Enter Password");//Masking password
@@ -40,19 +40,19 @@ int login_function()
                     }
                     password[i] = ch;
                     ch = '*' ;
-                    printf("%c",ch);
+                    printf("%c", ch);
                 }
                 password[i] = '\0';
             }while(flag);
             for(i = 0; i < 20;i++)
-                printf("%c",password[i]);
+                printf("%c", password[i]);
             break;
         case 2:
             main_menu();
             break;
             
         default:
-            printf("Incorrect option, please try again!");
+            printf("Incorrect option,  please try again!");
             break;
         }
     }
@@ -67,7 +67,7 @@ void main_menu()
     {
         printf("1. Apparatus\n2. Chemicals\n3. Student Fines\n4. Exit\n");
         printf("Enter your choice\n");
-        scanf("%d",&main_menu_choice);
+        scanf("%d", &main_menu_choice);
         switch (main_menu_choice)
         {       
         case 1:
@@ -91,22 +91,22 @@ void menu(int main_choice)
     for(;;)
     {
         printf("1.Add\n2.Modify\n3.Delete\n4.Show One\n5.Show All\nEnter your choice\n");
-        scanf("%d",&menu_choice);
+        scanf("%d", &menu_choice);
         switch (menu_choice)
         {
         case 1:
             add(main_choice);
             break;
         // case 2:
-        //     modify(main_choice,id,qty);
+        //     modify(main_choice, id, qty);
         //     break;
-        // case 3:
-        //     printf("Enter the id\n");
-        //     scanf("%s",id);
-        //     printf("Enter the quantity\n");
-        //     scanf("%f",qty);
-        //     delete(main_choice,id);
-        //     break;
+        case 3:
+            printf("Enter the id\n");
+            scanf("%s", id);
+            printf("Enter the quantity\n");
+            scanf("%f", qty);
+            delete(main_choice, id);
+            break;
         case 4:
             printf("Enter the id\n");
             scanf("%s",id);
@@ -152,76 +152,76 @@ void add(int main_choice)
     if(main_choice == 1)
     {
         printf("Enter name of the apparatus\n");
-        scanf("%[^\n]s",apps->name);//WE need to input spaces too!!
+        scanf("%[^\n]s", apps->name);//WE need to input spaces too!!
         printf("Enter id\n");
         temp = getchar();
-        scanf("%[^\n]s",apps->id);
+        scanf("%[^\n]s", apps->id);
         printf("Enter the quantity\n");
-        scanf("%d",apps->app_qty);
+        scanf("%d", apps->app_qty);
         printf("Enter the cost per unit\n");
-        scanf("%f",apps->cost);
-        gcvt(*apps->cost,7,str_cost_one);
+        scanf("%f", apps->cost);
+        gcvt(*apps->cost, 7, str_cost_one);
         total_cost = *apps->cost * *apps->app_qty;  
-        gcvt(total_cost,7,str_cost_total);
-        appptr = fopen("apparatus.txt","a+");
+        gcvt(total_cost, 7, str_cost_total);
+        appptr = fopen("apparatus.txt", "a+");
         if (!appptr)
         {
         // Error in file opening
         printf("Can't open file\n");
         return ;
         }
-        fprintf(appptr,"%s,%s,%d,%s,%s\n",apps->id,apps->name,*apps->app_qty,str_cost_one,str_cost_total);
+        fprintf(appptr, "%s, %s, %d, %s, %s\n", apps->id, apps->name, *apps->app_qty, str_cost_one, str_cost_total);
         fclose(appptr);
     }
     else if (main_choice == 2)
     {
         printf("Enter name of the chemicals\n");
-        scanf("%s[^\n]",chem->name);
+        scanf("%s[^\n]", chem->name);
         printf("Enter id\n");
         temp = getchar();
-        scanf("%s[^\n]",chem->id);
+        scanf("%s[^\n]", chem->id);
         printf("Enter the quantity\n");
-        scanf("%f",chem->qty);
-        gcvt(*chem->qty,6,str_chem_qty);
+        scanf("%f", chem->qty);
+        gcvt(*chem->qty, 6, str_chem_qty);
         printf("Enter the cost per unit\n");
-        scanf("%f",chem->cost);
-        gcvt(*chem->cost,7,str_cost_one);
+        scanf("%f", chem->cost);
+        gcvt(*chem->cost, 7, str_cost_one);
         total_cost = *chem->cost * *chem->qty;
-        gcvt(total_cost,7,str_cost_total);
-        chemptr = fopen("chemicals.txt","a+");
+        gcvt(total_cost, 7, str_cost_total);
+        chemptr = fopen("chemicals.txt", "a+");
         if (!chemptr)
         {
         // Error in file opening
         printf("Can't open file\n");
         return ;
         }
-        fprintf(chemptr,"%s,%s,%s,%s,%s\n",chem->id,chem->name,str_chem_qty,str_cost_one,str_cost_total);
+        fprintf(chemptr, "%s, %s, %s, %s, %s\n", chem->id, chem->name, str_chem_qty, str_cost_one, str_cost_total);
         fclose(chemptr);
     }
     else
     {
         printf("Enter name of student\n");
-        scanf("%s",stu->student_name);
+        scanf("%s", stu->student_name);
         printf("Enter the id of the apparatus\n");
-        scanf("%s",stu->app_id);
-        fineptr = fopen("fines.txt","a+");
+        scanf("%s", stu->app_id);
+        fineptr = fopen("fines.txt", "a+");
         if (!fineptr)
         {
         // Error in file opening
         printf("Can't open file\n");
         return ;
         }
-        exists = showOne(1,stu->app_id);//search if the apparatus id is valid
+        exists = showOne(1, stu->app_id);//search if the apparatus id is valid
         if(exists)
         {
             printf("Enter the quantity damaged\n");
-            scanf("%d",stu->qty);
+            scanf("%d", stu->qty);
             printf("Enter the cost per unit\n");
-            scanf("%f",cost_per_unit);
+            scanf("%f", cost_per_unit);
             *stu->total_cost = cost_per_unit * *stu->qty+50;
-            gcvt(total_cost,7,str_cost_total);
-            fprintf(fineptr,"%s,%s,%d,%s\n",stu->student_name,stu->app_id,stu->qty,total_cost);
-           // modify(1,stu->app_id,*stu->qty);
+            gcvt(total_cost, 7, str_cost_total);
+            fprintf(fineptr, "%s, %s, %d, %s\n", stu->student_name, stu->app_id, stu->qty, total_cost);
+           // modify(1, stu->app_id, *stu->qty);
             fclose(fineptr);
         }
         else
@@ -234,14 +234,14 @@ void add(int main_choice)
 
 
 
-int showOne(int main_choice,char *id)
+int showOne(int main_choice, char *id)
 {
     char *id_find;
     int i;
-    const char x = ',';
+    const char x = ', ';
     if(main_choice == 1)//Apparatus
     {
-        appptr = fopen("apparatus.txt","r");
+        appptr = fopen("apparatus.txt", "r");
         if (!appptr)
         {
         // Error in file opening
@@ -251,12 +251,12 @@ int showOne(int main_choice,char *id)
         //char ch = fgetc(appptr);
         char line[1024];
         char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
-        int cmp = -1,flag = 1;
+        int cmp = -1, flag = 1;
         int line_no = 0;
-        while(fgets(line,1024,appptr))
+        while(fgets(line, 1024, appptr))
         {
-            strcpy(line_cpy,line);
-            id_find = strtok(line,",");
+            strcpy(line_cpy, line);
+            id_find = strtok(line, ", ");
             cmp = strcmp(id_find,id);
             if(cmp == 0)
             {
@@ -282,7 +282,7 @@ int showOne(int main_choice,char *id)
     }
     else if(main_choice == 2)//Chemicals
     {
-        chemptr = fopen("chemicals.txt","r");
+        chemptr = fopen("chemicals.txt", "r");
         if (!chemptr)
         {
         // Error in file opening
@@ -292,17 +292,17 @@ int showOne(int main_choice,char *id)
         //char ch = fgetc(appptr);
         char line[1024];
         char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
-        int cmp = -1,flag = 1;
+        int cmp = -1, flag = 1;
         int line_no = 0;
-        while(fgets(line,1024,chemptr))
+        while(fgets(line, 1024, chemptr))
         {
-            strcpy(line_cpy,line);
-            id_find = strtok(line,",");
-            cmp = strcmp(id_find,id);
+            strcpy(line_cpy, line);
+            id_find = strtok(line, ", ");
+            cmp = strcmp(id_find, id);
             if(cmp == 0)
             {
-                printf("ID,Name,Quantity,Cost per unit,Total Cost\n");
-                printf("%s\n",line_cpy);
+                printf("ID, Name, Quantity, Cost per unit, Total Cost\n");
+                printf("%s\n", line_cpy);
                 flag = 1;
                 return 1;
             }
@@ -311,7 +311,7 @@ int showOne(int main_choice,char *id)
                 flag = 0;
             }
             
-            //printf("%s\n",id_find);
+            //printf("%s\n", id_find);
         }
         if(!flag)
         {
@@ -322,7 +322,7 @@ int showOne(int main_choice,char *id)
     }
     else
     {
-        fineptr = fopen("fines.txt","r");
+        fineptr = fopen("fines.txt", "r");
         if (!fineptr)
         {
         // Error in file opening
@@ -332,17 +332,17 @@ int showOne(int main_choice,char *id)
         //char ch = fgetc(appptr);
         char line[1024];
         char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
-        int cmp = -1,flag = 1;
+        int cmp = -1, flag = 1;
         int line_no = 0;
-        while(fgets(line,1024,fineptr))
+        while(fgets(line, 1024, fineptr))
         {
-            strcpy(line_cpy,line);
-            id_find = strtok(line,",");
-            cmp = strcmp(id_find,id);
+            strcpy(line_cpy, line);
+            id_find = strtok(line, ", ");
+            cmp = strcmp(id_find, id);
             if(cmp == 0)
             {
-                printf("ID,Name,Quantity,Cost per unit,Total Cost\n");
-                printf("%s\n",line_cpy);
+                printf("ID, Name, Quantity, Cost per unit, Total Cost\n");
+                printf("%s\n", line_cpy);
                 flag = 1;
                 return 1;
             }
@@ -351,7 +351,7 @@ int showOne(int main_choice,char *id)
                 flag = 0;
             }
             
-            //printf("%s\n",id_find);
+            //printf("%s\n", id_find);
         }
         if(!flag)
         {
@@ -367,7 +367,7 @@ void showAll(int choice)
 {
     if(choice == 1)
     {
-        appptr = fopen("apparatus.txt","r");
+        appptr = fopen("apparatus.txt", "r");
         if (!appptr)
         {
         // Error in file opening
@@ -375,15 +375,15 @@ void showAll(int choice)
         return ;
         }
         char line[1024];
-        while(fgets(line,1024,appptr))
+        while(fgets(line, 1024, appptr))
         {
-            printf("%s",line);
+            printf("%s", line);
         }
         printf("\n");
     }
     else if(choice == 2)
     {
-        chemptr = fopen("chemicals.txt","r");
+        chemptr = fopen("chemicals.txt", "r");
         if (!chemptr)
         {
         // Error in file opening
@@ -391,15 +391,15 @@ void showAll(int choice)
         return ;
         }
         char line[1024];
-        while(fgets(line,1024,chemptr))
+        while(fgets(line, 1024, chemptr))
         {
-            printf("%s",line);
+            printf("%s", line);
         }
         printf("\n");
     }
     else
     {
-        fineptr = fopen("fines.txt","r");
+        fineptr = fopen("fines.txt", "r");
         if (!fineptr)
         {
         // Error in file opening
@@ -407,10 +407,179 @@ void showAll(int choice)
         return ;
         }
         char line[1024];
-        while(fgets(line,1024,fineptr))
+        while(fgets(line, 1024, fineptr))
         {
-            printf("%s",line);
+            printf("%s", line);
         }
         printf("\n");
+    }
+}
+
+
+void delete(int main_choice, char *id)
+{
+    int x = -1;int lines = 0,i;
+    char line[1024];
+    if(main_choice == 1)//Apparatus
+    {
+        ptr2 = fopen("apparatus.txt", "r");
+        ptr3 = fopen("apparatus2.txt", "a+");
+
+        if (!ptr2)
+        {
+            // Error in file opening
+            printf("Can't open file\n");
+            return ;
+        }
+
+        if (!ptr3)
+        {
+            // Error in file opening
+            printf("Can't open file\n");
+            return ;
+        }
+
+        x = showOne(main_choice, id);
+
+        if(x != 0)//it exists
+        {
+            for(i = 0;i < x-1;i++)
+            {
+                fgets(line, 1024, ptr2);//fseek(appptr,)
+            }
+            fgets(line,1024,ptr2);
+            printf("%s", line);
+            fputs("\n",  ptr2);
+            // fseek(appptr, x*sizeof(struct apparatus), SEEK_SET);
+            // fgets(line, 1024, appptr);
+        }
+
+        rewind(ptr2);
+        for(i = 0;i < x-1;i++)
+            {
+                fgets(line, 1024, ptr2);//fseek(appptr, )
+                fputs(line, ptr3);
+            }
+
+        fgets(line, 1024, ptr2);
+
+        for(i = x = 1; !feof(ptr2) ;i++)
+            {
+                fgets(line, 1024, ptr2);//fseek(appptr, )
+                fputs(line, ptr3);
+            }
+
+        fclose(ptr2);
+        fclose(ptr3);
+        system("rm apparatus.txt");
+        system("mv apparatus2.txt apparatus.txt");
+       
+    }
+    else if(main_choice == 2)//CHEMICALS
+    {
+        ptr2 = fopen("chemicals.txt", "r");
+        ptr3 = fopen("chemicals2.txt", "a+");
+
+        if (!ptr2)
+        {
+            // Error in file opening
+            printf("Can't open file\n");
+            return ;
+        }
+
+        if (!ptr3)
+        {
+            // Error in file opening
+            printf("Can't open file\n");
+            return ;
+        }
+
+        x = showOne(main_choice, id);
+
+        if(x != 0)//it exists
+        {
+            for(i = 0;i < x-1;i++)
+            {
+                fgets(line, 1024, ptr2);//fseek(appptr,)
+            }
+            fgets(line, 1024, ptr2);
+            printf("%s", line);
+            fputs("\n",  ptr2);
+            // fseek(appptr, x*sizeof(struct apparatus), SEEK_SET);
+            // fgets(line, 1024, appptr);
+        }
+
+        rewind(ptr2);
+        for(i = 0;i < x-1;i++)
+            {
+                fgets(line, 1024, ptr2);//fseek(appptr, )
+                fputs(line, ptr3);
+            }
+
+        fgets(line, 1024, ptr2);
+
+        for(i = x = 1; !feof(ptr2) ;i++)
+            {
+                fgets(line, 1024, ptr2);//fseek(appptr, )
+                fputs(line, ptr3);
+            }
+
+        fclose(ptr2);
+        fclose(ptr3);
+        system("rm chemicals.txt");
+        system("mv chemicals2.txt chemicals.txt");
+    }
+    else
+    {
+        ptr2 = fopen("fines.txt", "r");
+        ptr3 = fopen("fines2.txt", "a+");
+
+        if (!ptr2)
+        {
+            // Error in file opening
+            printf("Can't open file\n");
+            return ;
+        }
+
+        if (!ptr3)
+        {
+            // Error in file opening
+            printf("Can't open file\n");
+            return ;
+        }
+
+        x = showOne(main_choice, id);
+
+        if(x != 0)//it exists
+        {
+            for(i = 0;i < x-1;i++)
+            {
+                fgets(line, 1024, ptr2);
+            }
+            fgets(line, 1024, ptr2);
+            printf("%s", line);
+            fputs("\n",  ptr2);
+        }
+
+        rewind(ptr2);
+        for(i = 0;i < x-1;i++)
+            {
+                fgets(line, 1024, ptr2);
+                fputs(line, ptr3);
+            }
+
+        fgets(line, 1024, ptr2);
+
+        for(i = x = 1; !feof(ptr2) ;i++)
+            {
+                fgets(line, 1024, ptr2);
+                fputs(line, ptr3);
+            }
+
+        fclose(ptr2);
+        fclose(ptr3);
+        system("rm fines.txt");
+        system("mv fines2.txt fines.txt");
+       
     }
 }
