@@ -97,9 +97,9 @@ void menu(int main_choice)
         case 1:
             add(main_choice);
             break;
-        // case 2:
-        //     modify(main_choice, id, qty);
-        //     break;
+        case 2:
+            modify(main_choice, id);
+            break;
         case 3:
             printf("Enter the id\n");
             scanf("%s", id);
@@ -583,3 +583,15 @@ void delete(int main_choice, char *id)
        
     }
 }
+
+
+void modify(int ch,char *id)
+{
+    if(showOne(ch,id))
+    {
+        delete(ch,id);
+        add(ch);
+    }
+
+}
+

@@ -35,7 +35,7 @@ int login_function();
 void main_menu();
 void menu(int);
 void add(int);
-void modify(int,char *,float);
+void modify(int,char * );
 void delete(int,char *);
 void showAll(int);
 int showOne(int,char *);
