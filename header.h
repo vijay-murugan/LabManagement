@@ -25,9 +25,9 @@ struct chemicals
 struct student
 {
     char *student_name;
-    char *app_id;
-    float *total_cost;
-    int *qty;
+    char *stu_id;
+    char *total_cost;
+    
 };
 
 

@@ -16,8 +16,7 @@ int main()
     chem->id = malloc(sizeof(char)*50);
     chem->qty = malloc(sizeof(int));
     stu = malloc(sizeof(struct student));
-    stu->app_id =  malloc(sizeof(char)*40);;
-    stu->qty = malloc(sizeof(int));
+    stu->stu_id =  malloc(sizeof(char)*40);;
     stu->student_name = malloc(sizeof(char)*50) ;
     stu->total_cost = (float *)malloc(sizeof(float));
     login_function();
