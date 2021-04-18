@@ -1,6 +1,7 @@
 #include "header.h"
 
 FILE *chemptr, *appptr, *fineptr, *ptr2, *ptr3;
+int checking;
 
 int login_function()
 {
@@ -10,41 +11,14 @@ int login_function()
     const int size = 20;  //DO not modify constant objects
     username = malloc(sizeof(char)*size);
     password = malloc(sizeof(char)*size);
-    char ch;//input character by character
-    int i;//loop variable
-    int flag = 0;
     printf("Welcome to the Login page\n");
     while(1)
     {
         printf("1. Students\n2. Admin\nEnter your choice\n");
-        scanf("%d", &login_choice);
+        checking = scanf("%d", &login_choice);
         switch (login_choice)
         {
         case 1:
-            
-            printf("Enter username\n");
-            scanf("%s", username);
-            //fscanf(stdin, username);//By the use of scanf for inputting strings we are taking care of              and avoiding spaces
-            do
-            {
-                printf("Enter Password");//Masking password
-                for(i=0;i<20;i++)
-                {
-                    ch = getchar();
-                    if(ch == ' ' || ch == '\t')
-                    {
-                        printf("\nNo spaces allowed please retry\n");
-                        flag = 1;
-                        break;
-                    }
-                    password[i] = ch;
-                    ch = '*' ;
-                    printf("%c", ch);
-                }
-                password[i] = '\0';
-            }while(flag);
-            for(i = 0; i < 20;i++)
-                printf("%c", password[i]);
             break;
         case 2:
             main_menu();
@@ -65,7 +39,9 @@ void main_menu()
     {
         printf("1. Apparatus\n2. Chemicals\n3. Student Fines\n4. Exit\n");
         printf("Enter your choice\n");
-        scanf("%d", &main_menu_choice);
+        checking = scanf("%d", &main_menu_choice);
+        if(main_menu_choice > 5 || main_menu_choice < 1)
+            main_menu();
         switch (main_menu_choice)
         {       
         case 1:
@@ -84,12 +60,13 @@ void main_menu()
 void menu(int main_choice)
 {
     int menu_choice;
-    float qty;
-    char *id;
+    char *id = malloc(sizeof(char)*50);
     for(;;)
     {
         printf("1.Add\n2.Modify\n3.Delete\n4.Show One\n5.Show All\nEnter your choice\n");
-        scanf("%d", &menu_choice);
+        checking = scanf("%d", &menu_choice);
+        if(menu_choice > 6 || menu_choice < 1)
+            menu(main_choice);
         switch (menu_choice)
         {
         case 1:
@@ -97,18 +74,24 @@ void menu(int main_choice)
             break;
         case 2:
             printf("Enter the id\n");
-            scanf("%s", id);
+            checking = scanf("%s", id);
+            if(checking > 50)
+                main_menu();
             modify(main_choice, id);
             break;
         case 3:
             printf("Enter the id\n");
-            scanf("%s", id);
+            checking = scanf("%s", id);
+            if(checking > 50)
+                main_menu();
             delete(main_choice, id);
             break;
         case 4:
             printf("Enter the id\n");
-            scanf("%s",id);
-            showOne(main_choice,id);
+            checking = scanf("%s", id);
+            if(checking > 50)
+                main_menu();
+            checking = showOne(main_choice,id);
             break;
         case 5:
             showAll(main_choice);
@@ -139,24 +122,31 @@ void add(int main_choice)
     stu = malloc(sizeof(struct student));
     stu->stu_id =  malloc(sizeof(char)*40);
     stu->student_name = malloc(sizeof(char)*50) ;
-    stu->total_cost = (float *)malloc(sizeof(float));
+    stu->total_cost = (char *)malloc(sizeof(char)*50);
     char str_cost_one[20],str_cost_total[50],str_chem_qty[50],temp;
-    char name_app[50];
-    int exists = 0;
-    float cost_per_unit,total_cost;
-    float chem_qty;
+   // char name_app[50];
+    //int exists = 0;
+     float total_cost;
+    // float chem_qty;
+    
     if(main_choice == 1)
     {
         printf("Enter id\n");
-        scanf("%s", apps->id);
-        if(!showOne(main_choice,apps->id))
+        checking = scanf("%s", apps->id);
+        checking = showOne(main_choice,apps->id);
+        if(checking != 0)
         {
             printf("Enter name of the apparatus\n");
-            scanf("%s", apps->name);
+            checking = scanf("%s", apps->name);
+            if(checking > 50)
+            {
+                printf("Invalid Name\n");
+                exit(0);
+            }
             printf("Enter the quantity\n");
-            scanf("%d", apps->app_qty);
+            checking = scanf("%d", apps->app_qty);
             printf("Enter the cost per unit\n");
-            scanf("%f", apps->cost);
+            checking = scanf("%f", apps->cost);
             gcvt(*apps->cost, 7, str_cost_one);
             total_cost = *apps->cost * *apps->app_qty;  
             gcvt(total_cost, 7, str_cost_total);
@@ -170,8 +160,11 @@ void add(int main_choice)
             }
             fprintf(appptr,"\n");
             fprintf(appptr, "%s,%s,%d,%s,%s", apps->id, apps->name, *apps->app_qty, str_cost_one, str_cost_total);
-            fclose(appptr);
-            
+            if(fclose(appptr) != 0) 
+            {
+                printf("File not closed\n");
+                exit(0);
+            }           
         }
         else
         {
@@ -184,16 +177,16 @@ void add(int main_choice)
     {
         
         printf("Enter id\n");
-        scanf("%s", chem->id);
+        checking = scanf("%s", chem->id);
         if(!showOne(main_choice,chem->id))
         {
             printf("Enter name of the chemicals\n");
-            scanf("%s", chem->name);
+            checking = scanf("%s", chem->name);
             printf("Enter the quantity\n");
-            scanf("%f", chem->qty);
+            checking = scanf("%f", chem->qty);
             gcvt(*chem->qty, 6, str_chem_qty);
             printf("Enter the cost per unit\n");
-            scanf("%f", chem->cost);
+            checking = scanf("%f", chem->cost);
             gcvt(*chem->cost, 7, str_cost_one);
             total_cost = *chem->cost * *chem->qty;
             gcvt(total_cost, 7, str_cost_total);
@@ -206,7 +199,11 @@ void add(int main_choice)
             }
             fprintf(chemptr,"\n");
             fprintf(chemptr, "%s,%s %s,%s,%s", chem->id, chem->name, str_chem_qty, str_cost_one, str_cost_total);
-            fclose(chemptr);
+            if(fclose(chemptr) != 0) 
+            {
+                printf("File not closed\n");
+                exit(0);
+            }      
             
         }
         else
@@ -218,13 +215,13 @@ void add(int main_choice)
     else
     {
         printf("Enter the id of the apparatus\n");
-        scanf("%s", stu->stu_id);
+        checking = scanf("%s", stu->stu_id);
         
         
         if(!showOne(main_choice,stu->stu_id))
         {
             printf("Enter name of student\n");
-            scanf("%s", stu->student_name);
+            checking = scanf("%s", stu->student_name);
             fineptr = fopen("fines.txt", "a+");
             if (!fineptr)
             {
@@ -234,11 +231,14 @@ void add(int main_choice)
             }
        
             printf("Enter the cost\n");
-            scanf("%s", stu->total_cost);
+            checking = scanf("%s", stu->total_cost);
             fprintf(fineptr,"\n");
             fprintf(fineptr, "%s,%s,%s", stu->stu_id, stu->student_name, stu->total_cost);
-           // 
-            fclose(fineptr);
+           if(fclose(fineptr) != 0) 
+            {
+                printf("File not closed\n");
+                exit(0);
+            }      
         }
         else
         {
@@ -252,10 +252,7 @@ void add(int main_choice)
 int showOne(int main_choice,char *id)
 {
     char *id_find;
-    int i;
-    long int line_no = 0;
-    
-    const char x = ',';
+    int line_no = 0;
     if(main_choice == 1)//Apparatus
     {
         appptr = fopen("apparatus.txt","r");
@@ -282,7 +279,12 @@ int showOne(int main_choice,char *id)
                 flag = 1;
                 //line_no = ftell(appptr);
                 line_no++;
-                fclose(appptr);
+                if(fclose(appptr) != 0) 
+                {
+                    printf("File not closed\n");
+                    exit(0);
+                }      
+                
                 return line_no;
             }
             else
@@ -290,13 +292,16 @@ int showOne(int main_choice,char *id)
                 flag = 0;
                 line_no++;
             }
-            
-            //printf("%s\n",id_find);
+
         }
         if(!flag)
         {
             printf("Entry Not found\n");
-            fclose(appptr);
+            if(fclose(appptr) != 0) 
+            {
+                printf("File not closed\n");
+                exit(0);
+            }      
             return 0;
         }
         
@@ -315,7 +320,7 @@ int showOne(int main_choice,char *id)
         char line[1024];
         char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
         int cmp = -1,flag = 1;
-        int line_no = 0;
+ 
         while(fgets(line,1024,chemptr))
         {
             strcpy(line_cpy,line);
@@ -327,7 +332,11 @@ int showOne(int main_choice,char *id)
                 printf("%s\n",line_cpy);
                 line_no++;
                 flag = 1;
-                fclose(chemptr);
+                if(fclose(chemptr) != 0) 
+                {
+                    printf("File not closed\n");
+                    exit(0);
+                }      
                 return line_no;
             }
             else
@@ -341,7 +350,11 @@ int showOne(int main_choice,char *id)
         if(!flag)
         {
             printf("Entry Not found\n");
-            fclose(chemptr);
+            if(fclose(chemptr) != 0) 
+            {
+                printf("File not closed\n");
+                exit(0);
+            }      
             return 0;
         }
         
@@ -359,7 +372,6 @@ int showOne(int main_choice,char *id)
         char line[1024];
         char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
         int cmp = -1,flag = 1;
-        int line_no = 0;
         while(fgets(line,1024,fineptr))
         {
             strcpy(line_cpy,line);
@@ -371,7 +383,11 @@ int showOne(int main_choice,char *id)
                 printf("%s\n",line_cpy);
                 line_no++;
                 flag = 1;
-                fclose(fineptr);
+                if(fclose(fineptr) != 0) 
+                {
+                    printf("File not closed\n");
+                    exit(0);
+                }      
                 return line_no;
             }
             else
@@ -385,7 +401,11 @@ int showOne(int main_choice,char *id)
         if(!flag)
         {
             printf("Entry Not found\n");
-            fclose(fineptr);
+            if(fclose(fineptr) != 0) 
+            {
+                printf("File not closed\n");
+                exit(0);
+            }      
             return 0;
         }
        

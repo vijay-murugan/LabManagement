@@ -18,7 +18,7 @@ int main()
     stu = malloc(sizeof(struct student));
     stu->stu_id =  malloc(sizeof(char)*40);;
     stu->student_name = malloc(sizeof(char)*50) ;
-    stu->total_cost = (float *)malloc(sizeof(float));
+    stu->total_cost = (char *)malloc(sizeof(char) * 50);
     login_function();
 
 }
