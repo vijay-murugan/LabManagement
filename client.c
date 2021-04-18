@@ -2,6 +2,10 @@
 
 int main()
 {
+    system("gcc imp.c");
+    system("./a.out");
+    printf("                                    Welcome to Chemistry Lab Mangment system\n              ");
+    printf("\n\n");
     struct apparatus *apps;
     struct chemicals *chem;
     struct student *stu;
@@ -19,6 +23,7 @@ int main()
     stu->stu_id =  malloc(sizeof(char)*40);;
     stu->student_name = malloc(sizeof(char)*50) ;
     stu->total_cost = (char *)malloc(sizeof(char) * 50);
-    login_function();
-
+    login_page();
+    
+    return 0;
 }

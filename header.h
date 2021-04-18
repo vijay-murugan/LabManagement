@@ -1,9 +1,10 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-
-
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<termios.h>
+#include<unistd.h> 
+#include<ctype.h>
+#include<stdbool.h>
 
 struct apparatus
 {
@@ -29,6 +30,24 @@ struct student
     char *total_cost;
     
 };
+
+void getdetails(char details[]);
+bool check_password_strength(char pa[]);
+bool uniquename(char *usrnm);
+void encrypt_pass(char std_pass[],char enc_pass[]);
+void login_granted();
+void create_account_student();
+void decrypt_and_check(char username[],char password[]);
+void login_page();
+void admin_login();
+int string_matching(char main_word[],char sub_word[]);
+int check_student_details(char usr[],char pass[]);
+void student_login();
+
+
+
+
+
 
 
 int login_function();
