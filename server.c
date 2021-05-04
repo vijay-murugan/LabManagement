@@ -3,6 +3,12 @@ int counter=0;
 int cn=0;
 int ctr=0;
 int ctr1=0;
+FILE *chemptr;
+FILE *appptr;
+FILE *fineptr;
+FILE *ptr2;
+FILE *ptr3;
+int checking;
 void getdetails(char details[])
 {
     static struct termios oldt, newt;
@@ -30,14 +36,13 @@ void getdetails(char details[])
 
 }
 
-
-
-
 bool check_password_strength(char pa[])
 {
     int lengt=(int)strlen(pa);
     int counter_for;
-    int uppercase=0,lowercase=0,specialcharacters=0;
+    int uppercase=0;
+    int lowercase=0;
+    int specialcharacters=0;
     for(counter_for=0;counter_for<lengt;counter_for++)
     {
         if((int)pa[counter_for]>=65 && (int)pa[counter_for]<=90)
@@ -64,12 +69,6 @@ bool check_password_strength(char pa[])
     }
 }
 
-
-
-
-
-
-
 bool uniquename(char *usrnm)
 {
     FILE *fp=fopen(".student_login_details.txt","r");
@@ -81,14 +80,14 @@ bool uniquename(char *usrnm)
     char *user_by_user;
     while(fgets(temp,100,fp))
     {
-            //printf("%s\n",temp);
+            
             user_by_user = strtok(temp,",");
             
             if(strcmp(usrnm,user_by_user)==0)
             {
                 return false;
             }
-            //printf("%s is userbyuser\n",user_by_user);
+            
     }
     if(fclose(fp)!=0)
     {
@@ -126,32 +125,7 @@ void login_granted()
     int admin_choice;
     return_val=system("clear");
     printf("                                                                                                                                    Welcome admin\n");
-    /*printf("1)Add fine for student\n");
-    printf("2)Create an account for student\n");
-    printf("3)To exit\n");
-    return_val=scanf("%d",&admin_choice);
-    if(return_val==EOF)
-    {
-        printf("Error in input entered sorry\n");
-        exit(0);
-    }
-    if(admin_choice==1)
-    {
-        printf("Done stuff\n");
-        login_granted();
-    }
-    else if(admin_choice==3)
-    {
-        system("rm .admin.txt");
-        exit(0);
-    }
-    else if(admin_choice==2)
-    {
-        create_account_student();
-    }*/
-
-
-    int main_menu_choice = 0;
+        int main_menu_choice = 0;
      for(;;)
      {
          printf("1. Apparatus\n2. Chemicals\n3. Student Fines\n4. Create an account for Student\n5. Exit\n");
@@ -173,7 +147,8 @@ void login_granted()
              break;
          case 5:
             system("rm .admin.txt");
-             exit(0);
+              exit(0);
+             break;
          default:
              break;
          }
@@ -186,16 +161,20 @@ void create_account_student()
     char student_username[100];
     char student_password[100];
     int return_val;
-    //system("clear");
     if(ctr!=0)
     {
         printf("Necessary crieteria for password not matched\n");
     }
-    printf("Student login UserID:-");
+    printf("Student login UserID(SRN):-");
     return_val=scanf("%s",student_username);
     if(return_val==EOF)
     {
         printf("Error in input entered sorry\n");
+        free(chemptr);
+        free(appptr);
+        free(fineptr);
+        free(ptr2);
+        free(ptr3);
         exit(0);
     }
     printf("Please chooose a password with atleast 1 Upper case 1 Lower case and 1 Special charcter\n");
@@ -219,13 +198,23 @@ void create_account_student()
                 if(return_val==EOF)
                 {
                     printf("Error in placing character in file\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
             }
-            return_val=fputc((int)',',fp);
+                return_val=fputc((int)',',fp);
                 if(return_val==EOF)
                 {
                     printf("Error in placing character in file\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
             char encry_pass[100];
@@ -236,6 +225,11 @@ void create_account_student()
                 if(return_val==EOF)
                 {
                     printf("Error in placing character in file\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
             }
@@ -243,12 +237,22 @@ void create_account_student()
                 if(return_val==EOF)
                 {
                     printf("Error in placing character in file\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
             return_val=fputc(10,fp);
                 if(return_val==EOF)
                 {
                     printf("Error in placing character in file\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
             if(fclose(fp)!=0)
@@ -322,7 +326,7 @@ void decrypt_and_check(char username[],char password[])
                 char temp=(char)b;
                 int no=(int)temp + (no_of_odd)*3;
                 decopass[counter_while]=(char)no;
-                //printf("b is %c and decoded is %c\n",b,(char)no);
+               
             }
             else
             {
@@ -330,15 +334,12 @@ void decrypt_and_check(char username[],char password[])
                 char temp=(char)b;
                 int no=(int)temp + (no_of_even)*4;
                 decopass[counter_while]=(char)no;
-                //printf("b is %c and decoded is %c\n",b,(char)no);
+
             }
             counter_while++;
             b=fgetc(fp1);
         }
         decopass[counter_while]='\0';
-        //printf("Decoded password is %s \n",decopass);
-        
-
         if(strcmp(decopass,password)==0 && strcmp(decoded,username)==0)
         {
             login_granted();
@@ -389,7 +390,12 @@ void login_page()
                 }
                 else
                 {
-                    printf("Invalid choice get lost without this the stack would get smashed\n");
+                    printf("Invalid choice get lost without this the buffer would get smashed\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
                 
@@ -421,6 +427,11 @@ void login_page()
                 else
                 {
                     printf("Invalid choice get lost without this the stack would get smashed\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }
             }
@@ -433,21 +444,24 @@ void login_page()
 //admin login page
 void admin_login()
 {
+    
+    
     int dump;
     int return_value;
     char *admin_username=malloc(sizeof(char)*20);
     char *admin_password=malloc(sizeof(char)*20);
     printf("Admin username: \n");
     return_value=scanf("%s",admin_username);
-    if(return_value==EOF)
+    counter++;
+    if(return_value==EOF || strlen(admin_username)>20)
     {
-        printf("Error in entered input\n");
+        printf("Error in entered input as length of username is not more than 20 characters\n");
+        admin_login();
     }
     printf("Admin Password:\n");
-    if(counter==0)
-    {
-        dump=getchar();
-    }
+    
+    dump=getchar();
+    
     if(admin_username!=NULL)
     {
         getdetails(admin_password);
@@ -508,7 +522,7 @@ int check_student_details(char usr[],char pass[])
             {
                 char *en=malloc(sizeof(char)*100);
                 encrypt_pass(pass,en);
-                printf("Temp  is %s\n",temp1);
+                //printf("Temp  is %s\n",temp1);
                 if(string_matching(temp1,en)==1)
                 {
                     //printf("Password matches\n");
@@ -538,9 +552,10 @@ void student_login()
     char student_password[100];
     printf("Student ID- ");
     return_val=scanf("%s",student_username);
-    if(return_val==EOF)
+    if(return_val==EOF || strlen(student_username)>100) 
     {
         printf("Invalid input\n");
+        student_login();
     }
     printf("Student Pasword:- ");
     if(ctr1==0)
@@ -553,42 +568,94 @@ void student_login()
     {
         return_val=system("clear");
         printf("                                                                                                                                Welcome %s\n",student_username);
-        showOne(3,student_username);
-    }
-
-}
-
-FILE *chemptr, *appptr, *fineptr, *ptr2, *ptr3;
-int checking;
-
-
-
-void main_menu()
-{
-    int main_menu_choice = 0;
-    for(;;)
-    {
-        printf("1. Apparatus\n2. Chemicals\n3. Student Fines\n4. Exit\n");
-        printf("Enter your choice\n");
-        checking = scanf("%d", &main_menu_choice);
-        if(main_menu_choice > 5 || main_menu_choice < 1)
-            main_menu();
-        switch (main_menu_choice)
-        {       
-        case 1:
-        case 2:
-        case 3:
-            menu(main_menu_choice);
-            break;    
-        case 4:
-            
+        char *id =student_username;
+        char *id_find;
+        int line_no = 0;
+        fineptr = fopen("fines.txt","r");
+        if (!fineptr)
+        {
+        // Error in file opening
+            printf("No Fine to be paid\n");
+            system("rm .admin.txt");
+            free(chemptr);
+            free(appptr);
+            free(fineptr);
+            free(ptr2);
+            free(ptr3);
             exit(0);
-        default:
-            break;
+            
         }
+        //char ch = fgetc(appptr);
+        char line[1024];
+        char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
+        int cmp = -1,flag = 1;
+        while(fgets(line,1024,fineptr))
+        {
+            strcpy(line_cpy,line);
+            id_find = strtok(line,",");
+            cmp = strcmp(id_find,id);
+            if(cmp == 0)
+            {
+                printf("ID,Name,Total Cost\n");
+                printf("%s\n",line_cpy);
+                line_no++;
+                flag = 1;
+                if(fclose(fineptr) != 0) 
+                {
+                    printf("File not closed\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
+                    exit(0);
+                }      
+                
+            }
+            else
+            {
+                line_no++;
+                flag = 0;
+            }
+            
+            
+        }
+        if(!flag)
+        {
+            printf("Entry Not found\n");
+            if(fclose(fineptr) != 0) 
+            {
+                printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
+                exit(0);
+            }      
+            //return 0;
+        }
+        system("rm .admin.txt");
+            free(chemptr);
+            free(appptr);
+            free(fineptr);
+            free(ptr2);
+            free(ptr3);
+        exit(0);
     }
-}
+    else
+    {
+        printf("Sorry but the details enetered donot match with our entries please start over again\n");
+        system("rm .admin.txt");
+        free(chemptr);
+            free(appptr);
+            free(fineptr);
+            free(ptr2);
+            free(ptr3);
+        exit(0);
+    }
 
+}
 void menu(int main_choice)
 {
     int menu_choice;
@@ -607,22 +674,22 @@ void menu(int main_choice)
         case 2:
             printf("Enter the id\n");
             checking = scanf("%s", id);
-            if(checking > 50)
-                main_menu();
+            if((int)strlen(id)> 50)
+                login_granted();
             modify(main_choice, id);
             break;
         case 3:
             printf("Enter the id\n");
             checking = scanf("%s", id);
-            if(checking > 50)
-                main_menu();
+            if((int)strlen(id) > 50)
+                login_granted();
             delete(main_choice, id);
             break;
         case 4:
             printf("Enter the id\n");
             checking = scanf("%s", id);
-            if(checking > 50)
-                main_menu();
+            if((int)strlen(id) > 50)
+               login_granted();
             checking = showOne(main_choice,id);
             break;
         case 5:
@@ -633,6 +700,7 @@ void menu(int main_choice)
             break;
         default:
             printf("Try again \n");
+            login_granted();
             break;
         }
     }
@@ -673,9 +741,14 @@ void add(int main_choice)
         {
             printf("Enter name of the apparatus\n");
             checking = scanf("%s", apps->name);
-            if(checking > 50)
+            if((int)strlen(apps->name) > 50)
             {
                 printf("Invalid Name\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }
             printf("Enter the quantity\n");
@@ -698,6 +771,11 @@ void add(int main_choice)
             if(fclose(appptr) != 0) 
             {
                 printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }           
         }
@@ -737,6 +815,11 @@ void add(int main_choice)
             if(fclose(chemptr) != 0) 
             {
                 printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }      
             
@@ -773,6 +856,11 @@ void add(int main_choice)
            if(fclose(fineptr) != 0) 
             {
                 printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }      
         }
@@ -818,6 +906,11 @@ int showOne(int main_choice,char *id)
                 if(fclose(appptr) != 0) 
                 {
                     printf("File not closed\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }      
                 
@@ -836,6 +929,11 @@ int showOne(int main_choice,char *id)
             if(fclose(appptr) != 0) 
             {
                 printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }      
             return 0;
@@ -871,6 +969,11 @@ int showOne(int main_choice,char *id)
                 if(fclose(chemptr) != 0) 
                 {
                     printf("File not closed\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }      
                 return line_no;
@@ -889,6 +992,11 @@ int showOne(int main_choice,char *id)
             if(fclose(chemptr) != 0) 
             {
                 printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }      
             return 0;
@@ -907,7 +1015,8 @@ int showOne(int main_choice,char *id)
         //char ch = fgetc(appptr);
         char line[1024];
         char line_cpy[1024];//To make a copy cause line gets modified when strtok is done
-        int cmp = -1,flag = 1;
+        int cmp = -1;
+        int flag = 1;
         while(fgets(line,1024,fineptr))
         {
             strcpy(line_cpy,line);
@@ -922,6 +1031,11 @@ int showOne(int main_choice,char *id)
                 if(fclose(fineptr) != 0) 
                 {
                     printf("File not closed\n");
+                    free(chemptr);
+                    free(appptr);
+                    free(fineptr);
+                    free(ptr2);
+                    free(ptr3);
                     exit(0);
                 }      
                 return line_no;
@@ -940,6 +1054,11 @@ int showOne(int main_choice,char *id)
             if(fclose(fineptr) != 0) 
             {
                 printf("File not closed\n");
+                free(chemptr);
+                free(appptr);
+                free(fineptr);
+                free(ptr2);
+                free(ptr3);
                 exit(0);
             }      
             return 0;
@@ -1171,7 +1290,6 @@ void showAll(int choice)
     }
 }
 
-
 void modify(int ch,char *id)
 {
     if(showOne(ch,id))
@@ -1179,6 +1297,4 @@ void modify(int ch,char *id)
         delete(ch,id);
         add(ch);
     }
-
 }
-
